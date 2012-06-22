@@ -61,4 +61,9 @@
     return result;
 }
 
+- (void)resetModel
+{
+    [self.operandStack removeAllObjects];
+}
+
 @end

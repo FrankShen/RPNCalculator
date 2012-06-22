@@ -55,13 +55,17 @@
     if (self.userIsInTheMiddleOfEnteringANumber){
         [self enterPressed];
     }
-    self.display.text = @"3.14159";
+    self.display.text = @"π";
     [self enterPressed];
 }
 
 - (IBAction)enterPressed
 {
-    [self.brain pushOperand:[self.display.text doubleValue]];
+    if ([self.display.text isEqualToString:@"π"]) {
+        [self.brain pushOperand:3.14159];
+    } else {
+        [self.brain pushOperand:[self.display.text doubleValue]];
+    }
     self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ ",self.display.text];
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
@@ -78,4 +82,11 @@
     }
 }
 
+- (IBAction)clearPressed
+{
+    [self.brain resetModel];
+    self.historyDisplay.text = @"";
+    self.display.text = @"0";
+    self.userIsInTheMiddleOfEnteringANumber = NO;
+}
 @end
