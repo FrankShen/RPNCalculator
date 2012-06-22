@@ -54,9 +54,6 @@
         result = cos([self popOperand]);
     } else if ([operation isEqualToString:@"sqrt"]) {
         result = sqrt([self popOperand]);
-    } else if ([operation isEqualToString:@"pi"]) {
-        [self pushOperand:3.14159];
-        return result;
     }
     
     [self pushOperand:result];

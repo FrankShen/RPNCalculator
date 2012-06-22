@@ -17,6 +17,7 @@
 @implementation CalculatorViewController
 
 @synthesize display = _display;
+@synthesize historyDisplay = _historyDisplay;
 @synthesize userIsInTheMiddleOfEnteringANumber = _userIsInTheMiddleOfEnteringANumber;
 @synthesize brain = _brain;
 
@@ -45,21 +46,23 @@
     NSString *operation = [sender currentTitle];
     double result = [self.brain performOperation:operation];
     self.display.text = [NSString stringWithFormat:@"%g",result];
+    self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ ",operation];
 }
 
 - (IBAction)piPressed
 {
+    
     if (self.userIsInTheMiddleOfEnteringANumber){
         [self enterPressed];
     }
-    NSString *operation = @"pi";
-    [self.brain performOperation:operation];
     self.display.text = @"3.14159";
+    [self enterPressed];
 }
 
 - (IBAction)enterPressed
 {
     [self.brain pushOperand:[self.display.text doubleValue]];
+    self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ ",self.display.text];
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
 
