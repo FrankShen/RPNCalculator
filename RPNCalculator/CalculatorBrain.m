@@ -45,9 +45,18 @@
     } else if ([operation isEqualToString:@"-"]) {
         double subtrahend = [self popOperand];
         result = [self popOperand] - subtrahend;
-    }  else if ([operation isEqualToString:@"/"]) {
+    } else if ([operation isEqualToString:@"/"]) {
         double divisor = [self popOperand];
         result = [self popOperand] / divisor;
+    } else if ([operation isEqualToString:@"sin"]) {
+        result = sin([self popOperand]);
+    } else if ([operation isEqualToString:@"cos"]) {
+        result = cos([self popOperand]);
+    } else if ([operation isEqualToString:@"sqrt"]) {
+        result = sqrt([self popOperand]);
+    } else if ([operation isEqualToString:@"pi"]) {
+        [self pushOperand:3.14159];
+        return result;
     }
     
     [self pushOperand:result];

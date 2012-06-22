@@ -47,10 +47,32 @@
     self.display.text = [NSString stringWithFormat:@"%g",result];
 }
 
+- (IBAction)piPressed
+{
+    if (self.userIsInTheMiddleOfEnteringANumber){
+        [self enterPressed];
+    }
+    NSString *operation = @"pi";
+    [self.brain performOperation:operation];
+    self.display.text = @"3.14159";
+}
+
 - (IBAction)enterPressed
 {
     [self.brain pushOperand:[self.display.text doubleValue]];
     self.userIsInTheMiddleOfEnteringANumber = NO;
+}
+
+- (IBAction)dotPressed
+{
+    if (!self.userIsInTheMiddleOfEnteringANumber) {
+        self.display.text = @"0.";
+        self.userIsInTheMiddleOfEnteringANumber = YES;
+    } else {
+        NSRange dotRange = [self.display.text rangeOfString:@"."];
+        if (dotRange.location == NSNotFound)
+            self.display.text = [self.display.text stringByAppendingString:@"."];
+    }
 }
 
 @end
