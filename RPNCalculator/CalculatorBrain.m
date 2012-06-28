@@ -15,22 +15,34 @@
 @implementation CalculatorBrain
 
 @synthesize programStack = _programStack;
+@synthesize variableValue = _variableValue;
 
+-(NSDictionary *)variableValue
+{
+    if (!_variableValue){
+        _variableValue = [[NSMutableDictionary alloc] init];
+        [_variableValue setObject:[NSNumber numberWithDouble:0] forKey:@"x"];
+        [_variableValue setObject:[NSNumber numberWithDouble:0] forKey:@"y"];
+        [_variableValue setObject:[NSNumber numberWithDouble:0] forKey:@"z"];
+    }
+    return _variableValue;
+}
 - (NSMutableArray *)programStack
 {
     if (!_programStack) _programStack = [[NSMutableArray alloc] init];
     return _programStack;
 }
 
-- (void)pushOperand:(double)operand
+- (void)pushOperand:(id)operand
 {
-    [self.programStack addObject:[NSNumber numberWithDouble:operand]];
+    [self.programStack addObject:operand];
 }
 
 - (double)performOperation:(NSString *)operation
 {
     [self.programStack addObject:operation];
-    return [CalculatorBrain runProgram:self.program];
+    //return [CalculatorBrain runProgram:self.program];
+    return [CalculatorBrain runProgram:self.program usingVariableValues:self.variableValue];
 }
 
 - (id)program
@@ -71,7 +83,6 @@
         } else if ([operation isEqualToString:@"sqrt"]) {
             result = sqrt([self popOperandOffStack:stack]);
         }
-
     }
     
     return result;
@@ -85,6 +96,52 @@
     }
     return [self popOperandOffStack:stack];
     
+}
+
++ (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
+{
+    NSMutableArray *stack;
+    if ([program isKindOfClass:[NSArray class]]) {
+        stack = [program mutableCopy];
+        int count = stack.count;
+        for (int idx = 0; idx < count; ++idx){
+            if ([[stack objectAtIndex:idx] isKindOfClass:[NSString class]]){
+                if ([[stack objectAtIndex:idx] isEqualToString:@"x"]){
+                    [stack replaceObjectAtIndex:idx withObject:[variableValues objectForKey:@"x"]];
+                } else if ([[stack objectAtIndex:idx] isEqualToString:@"y"]){
+                    [stack replaceObjectAtIndex:idx withObject:[variableValues objectForKey:@"y"]];
+                } else if ([[stack objectAtIndex:idx] isEqualToString:@"z"]){
+                    [stack replaceObjectAtIndex:idx withObject:[variableValues objectForKey:@"z"]];
+                } 
+            }
+        }
+    }
+    return [self popOperandOffStack:stack];
+}
+
++ (NSSet *)variablesUsedInProgram:(id)program
+{
+    NSMutableSet *usedVariables = [[NSMutableSet alloc] init];
+    if ([program isKindOfClass:[NSArray class]]) {
+        NSArray *stack = [program copy];
+        NSLog(@"%@",stack);
+        int count = stack.count;
+        for (int idx = 0; idx < count; ++idx){
+            if ([[stack objectAtIndex:idx] isKindOfClass:[NSString class]]){
+                if ([[stack objectAtIndex:idx] isEqualToString:@"x"]){
+                    [usedVariables addObject:@"x"];
+                } else if ([[stack objectAtIndex:idx] isEqualToString:@"y"]){
+                    [usedVariables addObject:@"y"];
+                } else if ([[stack objectAtIndex:idx] isEqualToString:@"z"]){
+                    [usedVariables addObject:@"z"];
+                } 
+            }
+        }
+    }
+    if (usedVariables.count)
+        return usedVariables;
+    else
+        return nil;
 }
 
 - (void)resetModel
