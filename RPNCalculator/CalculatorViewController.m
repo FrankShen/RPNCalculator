@@ -74,7 +74,7 @@
 - (IBAction)enterPressed
 {
     if ([self.display.text isEqualToString:@"π"]) {
-        [self.brain pushOperand:[NSNumber numberWithDouble:3.14159]];
+        [self.brain pushOperand:@"π"];
     } else if ([self.display.text isEqualToString:@"x"]){
         [self.brain pushOperand:@"x"];
     } else if ([self.display.text isEqualToString:@"y"]){

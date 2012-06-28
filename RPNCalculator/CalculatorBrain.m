@@ -112,7 +112,9 @@
                     [stack replaceObjectAtIndex:idx withObject:[variableValues objectForKey:@"y"]];
                 } else if ([[stack objectAtIndex:idx] isEqualToString:@"z"]){
                     [stack replaceObjectAtIndex:idx withObject:[variableValues objectForKey:@"z"]];
-                } 
+                } else if ([[stack objectAtIndex:idx] isEqualToString:@"π"]){
+                    [stack replaceObjectAtIndex:idx withObject:[NSNumber numberWithDouble:3.14159]]; 
+                }
             }
         }
     }
