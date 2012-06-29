@@ -86,6 +86,7 @@
     } 
     self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ ",self.display.text];
     self.userIsInTheMiddleOfEnteringANumber = NO;
+    //NSLog(@"%@\n",[CalculatorBrain descriptionOfProgram:self.brain.program]);
 }
 
 - (IBAction)dotPressed

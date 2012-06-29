@@ -50,9 +50,44 @@
     return [self.programStack copy];
 }
 
++ (NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack
+{
+    NSString *result = @"";
+    
+    id topOfStack = [stack lastObject];
+    if (topOfStack) [stack removeLastObject];
+    if ([topOfStack isKindOfClass:[NSNumber class]]){
+        result = [NSString stringWithFormat:@"%g",[topOfStack doubleValue]];
+    } else if ([topOfStack isKindOfClass:[NSString class]]){
+        NSString *operation = topOfStack;
+        if ([operation isEqualToString:@"+"]){
+            result = [NSString stringWithFormat:@"(%@ + %@)",[CalculatorBrain descriptionOfTopOfStack:stack],[CalculatorBrain descriptionOfTopOfStack:stack]];
+        } else if ([operation isEqualToString:@"-"]){
+            result = [NSString stringWithFormat:@"(%@ - %@)",[CalculatorBrain descriptionOfTopOfStack:stack],[CalculatorBrain descriptionOfTopOfStack:stack]];
+        } else if ([operation isEqualToString:@"*"]){
+            result = [NSString stringWithFormat:@"(%@ * %@)",[CalculatorBrain descriptionOfTopOfStack:stack],[CalculatorBrain descriptionOfTopOfStack:stack]];
+        } else if ([operation isEqualToString:@"/"]){
+            result = [NSString stringWithFormat:@"(%@ / %@)",[CalculatorBrain descriptionOfTopOfStack:stack],[CalculatorBrain descriptionOfTopOfStack:stack]];
+        } else if ([operation isEqualToString:@"sin"]){
+            result = [NSString stringWithFormat:@"sin(%@)",[CalculatorBrain descriptionOfTopOfStack:stack]];
+        } else if ([operation isEqualToString:@"cos"]){
+            result = [NSString stringWithFormat:@"cos(%@)",[CalculatorBrain descriptionOfTopOfStack:stack]];
+        } else if ([operation isEqualToString:@"sqrt"]){
+            result = [NSString stringWithFormat:@"sqrt(%@)",[CalculatorBrain descriptionOfTopOfStack:stack]];
+        } else {
+            result = operation;
+        }
+    }
+    return result;
+}
+
 + (NSString *)descriptionOfProgram:(id)program
 {
-    return @"Implement this in Assignment 2";
+    NSMutableArray *stack = [[NSMutableArray alloc] init];
+    if ([program isKindOfClass:[NSArray class]]) {
+        stack = [program mutableCopy];
+    }
+    return [CalculatorBrain descriptionOfProgram:stack];
 }
 
 + (double) popOperandOffStack:(NSMutableArray *)stack
